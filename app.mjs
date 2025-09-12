@@ -38,5 +38,5 @@ app.use(express.json()); // Parse JSON bodies
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'miniapp.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
