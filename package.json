@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",  
+  "license": "ISC",
   "dependencies": {
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
@@ -19,7 +19,6 @@
     "type": "git",
     "url": "git+https://github.com/RobCMYK/mini-app.git"
   },
-
   "bugs": {
     "url": "https://github.com/RobCMYK/mini-app/issues"
   },
