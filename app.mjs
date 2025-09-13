@@ -9,10 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-//const mongoUri = process.env.MONGO_URI;         Make .env
-//console.log("is env working? ", mongoUri);
+const mongoUri = process.env.MONGO_URI;  //Make ENV
+console.log("is env working? ", mongoUri);
 
-const client = new MongoClient(process.env.MONGO_URI, {
+const client = new MongoClient(mongoUri, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
@@ -39,4 +39,17 @@ app.use(express.json()); // Parse JSON bodies
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'miniapp.html'));
+});
+
+
+
+
+
+
+
+
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
