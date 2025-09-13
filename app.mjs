@@ -36,12 +36,10 @@ app.use(express.urlencoded  ({ extended: true })); // Parse form data
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the "public" directory
 app.use(express.json()); // Parse JSON bodies
 
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'miniapp.html'));
+// Get the web page miniapp.html
+app.get('/miniapp', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'miniapp.html'));
 });
-
-
 
 
 
