@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const uri = process.env.MONGO_URI;  //Make ENV
+const uri = process.env.MONGO_URI;
 console.log("ENV works", uri);
 
 const client = new MongoClient(uri, {
