@@ -4,10 +4,7 @@ Setting up a Node app is often the first real step a student takes into becommin
 When it comes to building any Node application, the first step is to install and configure node on your repository. This is as easy as copy-pasting a few commands from online into your terminal. I already had some code I was going to reuse from another project, so I ran the command `npm run start`, which in previous experience immediately ran the program. However, I encountered an error. Node was telling me that "start" was undefined and it did not find it in any of the node packages. I didn't work on fixing the issue immediately because I was hungry and the cafeteria I went to school at was about to close, so being the organized college student I was (and am) I left a comment in the code to <mark>handoff my work to a future, satiated me</mark>. After my meal, I quickly returned to work and fixed the issue, a missing alias in a node package.
 
 ## Agile Handoffs
-What exactly is a handoff in Agile? Why should I care about Agile handoffs? These are questions you might have if you are just getting into full-stack development. 
+What exactly is a handoff in Agile? Why should I care about Agile handoffs? These are questions you might have if you are just getting into full-stack development. According to this article, [Why Handoffs Are Killing your Agility](https://www.scrum.org/resources/blog/why-handoffs-are-killing-your-agility#:~:text=May%2019%2C%202025,over%20the%20fence%20to%20developers.) by Martin Henshelwood, handoffs are "when one team or individual completes a task and passes it to another team for further work." In the development world, handoffs are used when a piece of an application makes it through a stage of the development life cycle. In my situation, I developed the code, handed it off to the testing team (me), and then to the maintenance team (myself), before commiting it to my repository. You might wonder, "If I'm not working on a team, should I still make handoffs to myself?" The answer is yes. Making handoffs to your self is just as important as making them to a team.
 
 
-<!-- Forgot to npm init -y
-Had to write "start": "node app.mjs" to scripts in package.json
-Keep getting "TypeError: Cannot read preperties of undefined (reading 'startsWith')"
-Actually just an error connecting to mongo, improper variable name for env URI -->
+<!-- Find two articles on importance of handoffs -->
