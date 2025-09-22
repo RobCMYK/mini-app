@@ -1,21 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="styles/miniapp.css">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="styles/miniapp.css">
 </head>
+
 <body>
-    <style>    
-    
-    </style>
-    <div class="banner" role="navigation" aria-label="Main">
-        <nav>
-            <h1 name="title">Edura</h1>
-            <a href="miniapp.html" class="active">This Page</a>
-            <a href="other-page.html">Other Page</a>
-        </nav>
-    </div>
+    <main>
+        <section class="max-w-screen-2xl px-3 mx-auto my-8 mt-20 xl:px-20 lg:px-14 md:px-10">
+            <div class="mb-10">
+                <div>
+                    <h2 class="text-3xl font-bold mb-10">Create Flashcard</h2>
+                </div>
+                <nav>
+                    <ul class="flex items-center gap-4 border-b-2 pb-2 border-gray-300">
+                        <li class="text-lg font-semibold text-gray-500"><a
+                                class="border-b-4 pb-2 text-red-500 border-red-500 active" href="/"
+                                aria-current="page">Create New</a></li>
+                        <li class="text-lg font-semibold text-gray-500"><a class="" href="/dashboard">My Flashcard</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div>
+                <form action="#" autocomplete="false">
+                    <section class="mb-10 flex flex-col gap-10">
+                        <div class="bg-white shadow-md md:p-10 p-5 rounded-md sm:p-5">
+                            <div class="flex items-end gap-5 mb-5 sm:flex-row flex-col flex-wrap">
+                                <div class="flex flex-col gap-2 md:w-80 w-full"><label for="group"
+                                        class="font-semibold text-gray-500">Create Group*</label>
+                                    <div class="flex flex-col gap-2 md:w-80 w-full relative"><input name="groups.group"
+                                            type="text" id="group" placeholder="Organic Chemistry" required=""
+                                            autocomplete="false" class="p-2 text-lg border-2 rounded-md"
+                                            value="Webdevelopment"></div>
+                                </div>
+                                <div>
+                                    <button type="button"
+                                        class="border-2 rounded-md min-w-max font-semibold text-lg px-6 py-2"><label
+                                            for="profile" class="flex items-center gap-1 cursor-pointer"><svg
+                                                stroke="currentColor" fill="currentColor" stroke-width="0"
+                                                viewBox="0 0 1024 1024" class="text-blue-700" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M854.6 288.7L639.4 73.4c-6-6-14.2-9.4-22.7-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.6-9.4-22.6zM400 402c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40 17.9-40 40-40zm296 294H328c-6.7 0-10.4-7.7-6.3-12.9l99.8-127.2a8 8 0 0 1 12.6 0l41.1 52.4 77.8-99.2a8 8 0 0 1 12.6 0l136.5 174c4.3 5.2.5 12.9-6.1 12.9zm-94-370V137.8L790.2 326H602z">
+                                                </path>
+                                            </svg>Upload Image<input name="groups.profile" type="file" id="profile"
+                                                hidden="" accept="image/*" value=""></label></button>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2 relative"><grammarly-extension
+                                    data-grammarly-shadow-root="true"
+                                    style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"
+                                    class="dnXmp"></grammarly-extension><grammarly-extension
+                                    data-grammarly-shadow-root="true"
+                                    style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"
+                                    class="dnXmp"></grammarly-extension><label for="groupDescription"
+                                    class="font-semibold text-gray-500">Add Description</label><textarea
+                                    name="groups.groupDesc" id="groupDescription" maxlength="500"
+                                    placeholder="Write your description here ( max length is 500 words )"
+                                    class="p-2 text-lg border-2 rounded-md h-36 resize-none" spellcheck="false"
+                                    aria-label="To enrich screen reader interactions, please activate Accessibility in Grammarly extension settings"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <ul class="bg-white md:p-10 rounded-md sm:p-5 p-5 shadow-md flex flex-col gap-8">
+                                <li class="flex gap-5 items-start md:flex-row flex-col sm:flex-col sm:w-full"><span
+                                        class="px-4 py-2 text-xl font-bold rounded-full bg-red-200">1</span>
+                                    <div class="flex items-end flex-wrap gap-5 md:flex-row sm:flex-col flex-col w-full">
+                                        <div class="flex flex-col gap-2 md:w-80 w-full"><label for="Term0"
+                                                class="font-semibold text-gray-500">Enter Term*</label>
+                                            <div class="flex flex-col gap-2 md:w-80 w-full relative"><input
+                                                    name="terms.0.term" type="text" id="Term0"
+                                                    placeholder="What is ISP?" required="" autocomplete="false"
+                                                    class="p-2 text-lg border-2 rounded-md" value=""><span
+                                                    data-testid="error-msg"
+                                                    class="absolute top-12 left-0 text-red-600">Term is required</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col gap-2 md:w-80 w-full"><label for="Definition0"
+                                                class="font-semibold text-gray-500">Enter Definition*</label>
+                                            <div class="flex flex-col gap-2 md:w-80 w-full relative"><input
+                                                    name="terms.0.definition" type="text" id="Definition0"
+                                                    placeholder="An ISP (internet service provider) is..." required=""
+                                                    autocomplete="false" class="p-2 text-lg border-2 rounded-md"
+                                                    value=""></div>
+                                        </div>
+                                        <div><button type="button"
+                                                class="border-2 rounded-md  min-w-max font-semibold text-lg px-6 py-2"><label
+                                                    for="cardImage-0" class="flex items-center cursor-pointer"><svg
+                                                        stroke="currentColor" fill="currentColor" stroke-width="0"
+                                                        viewBox="0 0 1024 1024" class="text-blue-700" height="1em"
+                                                        width="1em" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M854.6 288.7L639.4 73.4c-6-6-14.2-9.4-22.7-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.6-9.4-22.6zM400 402c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40 17.9-40 40-40zm296 294H328c-6.7 0-10.4-7.7-6.3-12.9l99.8-127.2a8 8 0 0 1 12.6 0l41.1 52.4 77.8-99.2a8 8 0 0 1 12.6 0l136.5 174c4.3 5.2.5 12.9-6.1 12.9zm-94-370V137.8L790.2 326H602z">
+                                                        </path>
+                                                    </svg>Upload Image<input type="file" id="cardImage-0" hidden=""
+                                                        accept="image/*"></label></button></div>
+                                    </div>
+                                </li>
+                                <li class="text-center md:text-left"><button type="button"
+                                        class="font-semibold text-blue-700 mt-5">+ Add more</button></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <div class="mx-auto text-center"><button type="submit" disabled=""
+                            class="font-semibold rounded-md text-white text-xl px-14 py-4 bg-red-200">Create
+                            Flashcard</button></div>
+                </form>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>
