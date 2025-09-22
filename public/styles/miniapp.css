@@ -1,0 +1,29 @@
+.banner {
+        background: midnightblue;
+        padding-bottom: 1%;
+        padding-top: 0.5%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-family:Arial, sans-serif;
+        text-align:center;
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        width:100%;
+        box-sizing:border-box;
+        margin:0;
+    }
+    .banner, h1 {
+        color: ivory;
+    }
+    .banner nav a {
+        color: ivory;
+        text-decoration:none;
+        margin-right:20px;
+        font-weight:600;
+    }
+    .banner nav a:last-child { margin-right:0; }
+    .banner nav a:hover,
+    .banner nav a.active { text-decoration:underline; }
