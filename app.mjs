@@ -32,7 +32,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.use(express.urlencoded  ({ extended: true })); // Parse form data
+app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the "public" directory
 app.use(express.json()); // Parse JSON bodies
 
