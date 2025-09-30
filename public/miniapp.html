@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7ie2e5c5Zl5G1F5r5g5r5g5r5g5r5g5r5g5" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeo5eJ6bZ6p6t5g5r5g5r5g5r5g5r5g5r5g5r5g5r5g5r5g5" crossorigin="anonymous"></script>
 <head>
   <meta charset="UTF-8">
   <title>Mini App</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./style.css">
   <script src="card.mjs" defer></script>
 </head>
 
 <body>
-  <main>
-    <div class="header">
-      MiniApp
+  <main class="container py-4">
+    <div class="banner text-center fw-bold fs-3 py-3 mb-4">
+      Brainlet
     </div>
     <div>
       <section class="form-section">
-        <h2>Create Flashcard Set</h2>
+        <h2 class="h4 mb-3">Create Flashcard Set</h2>
         <form>
-          <div>
-            <label for="flashcard-title">Title:</label>
-            <input type="text" id="flashcard-title" name="flashcard-title" placeholder="Enter a title for your flashcard set">
+          <div class="mb-3">
+            <label for="flashcard-title" class="form-label">Title</label>
+            <input type="text" id="flashcard-title" name="flashcard-title" class="form-control" placeholder="Enter a title for your flashcard set">
           </div>
-          <div>
-            <label for="flashcard-description">Description:</label>
-            <textarea id="flashcard-description" name="flashcard-description" rows="4" placeholder="Enter a description for your flashcard set"></textarea>
+          <div class="mb-0">
+            <label for="flashcard-description" class="form-label">Description</label>
+            <textarea id="flashcard-description" name="flashcard-description" rows="4" class="form-control" placeholder="Enter a description for your flashcard set"></textarea>
           </div>
         </form>
       </section>
-      <form>
-        <template id="flashcard-template">
-          <section class="flashcard">
-            <div>
-              <h3 class="flashcard-title">#</h3>
-              <div>
-                <label class="label-term">Term:</label>
-                <input type="text" class="flashcard-term" placeholder="Enter the term">
-              </div>
-              <div>
-                <label class="label-def">Definition:</label>
-                <textarea class="flashcard-definition" rows="4" placeholder="Enter the definition"></textarea>
-              </div>
+
+      <form id="cards-form" autocomplete="off" class="mb-5">
+        <div id="cards-container" class="d-grid gap-3"></div>
+
+        <template id="card-template">
+          <section class="p-3 border rounded">
+            <h3 class="h6 mb-3 card-title"></h3>
+            <div class="mb-2">
+              <label class="form-label" for="card-term-__ID__">Term</label>
+              <input type="text" class="form-control card-term" id="card-term-__ID__" placeholder="Enter the term">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="card-def-__ID__">Definition</label>
+              <textarea class="form-control card-definition" id="card-def-__ID__" rows="4" placeholder="Enter the definition"></textarea>
             </div>
           </section>
-        </template>
+        </template> 
       </form>
-      <div>
-        <button id="add-flashcard" type="button">Add Flashcard</button>
+
+      <div class="actions-fixed">
+        <button id="add-flashcard" type="button" class="btn btn-outline-light">Add Flashcard</button>
+        <button id="save-set" type="button" class="btn btn-primary ms-2">Save Set</button>
       </div>
     </div>
   </main>
-</body>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="card.js" defer></script>
+</body>
 </html>

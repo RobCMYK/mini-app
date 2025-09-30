@@ -20,35 +20,99 @@ const client = new MongoClient(uri, {
     }
 });
 
-async function run() {
+// Keep a single connection open and reuse it
+let db;
+async function start() {
     try {
         await client.connect();
         await client.db("admin").command({ ping: 1 });
         console.log("Connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
+        db = client.db(process.env.DB_NAME || 'miniapp');
+    } catch (err) {
+        console.error('Mongo connection failed:', err);
+        process.exit(1);
     }
 }
-run().catch(console.dir);
+await start();
 
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the "public" directory
 app.use(express.json()); // Parse JSON bodies
 
+// API to save a flashcard set
+app.post('/api/flashcard-sets', async (req, res) => {
+    console.log('Received data:', req.body);
+    try {
+        const { title, description, cards } = req.body;
+        if (!title || !Array.isArray(cards)) {
+            return res.status(400).json({ error: 'title and cards[] are required' });
+        }
+        const cleanedCards = cards
+            .map((c, i) => ({
+                term: String(c?.term || '').trim(),
+                definition: String(c?.definition || '').trim(),
+                order: i,
+            }))
+            .filter(c => c.term || c.definition);
+
+        if (cleanedCards.length === 0) {
+            return res.status(400).json({ error: 'cards must include at least one term/definition' });
+        }
+
+        const doc = {
+            title: String(title).trim(),
+            description: String(description || '').trim(),
+            cards: cleanedCards,
+            createdAt: new Date(),
+        };
+
+        const result = await db.collection('flashcardSets').insertOne(doc);
+        res.status(201).json({ id: result.insertedId });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'failed to save set' });
+    }
+});
+
+// API to list flashcard sets
+app.get('/api/flashcard-sets', async (req, res) => {
+    try {
+        const { q, limit = 20, skip = 0 } = req.query;
+
+        const filter = {};
+        if (q && String(q).trim()) {
+            const term = String(q).trim();
+            filter.$or = [
+                { title: { $regex: term, $options: 'i' } },
+                { description: { $regex: term, $options: 'i' } },
+                { 'cards.term': { $regex: term, $options: 'i' } },
+                { 'cards.definition': { $regex: term, $options: 'i' } },
+            ];
+        }
+
+        const col = db.collection('flashcardSets');
+        const [items, total] = await Promise.all([
+            col.find(filter, { projection: { cards: 0 } })
+               .sort({ createdAt: -1 })
+               .skip(Number(skip) || 0)
+               .limit(Math.min(Number(limit) || 20, 100))
+               .toArray(),
+            col.countDocuments(filter),
+        ]);
+
+        res.json({ items, total });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'failed to list sets' });
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'miniapp.html'));
 });
 
-
-
-
-
-
-
-
-
+process.on('SIGINT', async () => { await client.close(); process.exit(0); });
+process.on('SIGTERM', async () => { await client.close(); process.exit(0); });
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
