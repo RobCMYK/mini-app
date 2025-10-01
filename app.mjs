@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,7 +28,7 @@ async function start() {
         await client.connect();
         await client.db("admin").command({ ping: 1 });
         console.log("Connected to MongoDB!");
-        db = client.db(process.env.DB_NAME || 'miniapp');
+        db = client.db(process.env.DB_NAME || 'Cluster0');
     } catch (err) {
         console.error('Mongo connection failed:', err);
         process.exit(1);
@@ -66,8 +67,8 @@ app.post('/api/flashcard-sets', async (req, res) => {
             createdAt: new Date(),
         };
 
-        const result = await db.collection('flashcardSets').insertOne(doc);
-        res.status(201).json({ id: result.insertedId });
+    const result = await db.collection('flashcardSets').insertOne(doc);
+    res.status(201).json({ id: String(result.insertedId) });
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'failed to save set' });
@@ -91,7 +92,7 @@ app.get('/api/flashcard-sets', async (req, res) => {
         }
 
         const col = db.collection('flashcardSets');
-        const [items, total] = await Promise.all([
+        const [itemsRaw, total] = await Promise.all([
             col.find(filter, { projection: { cards: 0 } })
                .sort({ createdAt: -1 })
                .skip(Number(skip) || 0)
@@ -100,10 +101,29 @@ app.get('/api/flashcard-sets', async (req, res) => {
             col.countDocuments(filter),
         ]);
 
+        // Normalize _id to id string for the client
+        const items = itemsRaw.map(({ _id, ...rest }) => ({ id: String(_id), ...rest }));
+
         res.json({ items, total });
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'failed to list sets' });
+    }
+});
+
+// API to get a single flashcard set by ID
+app.get('/api/flashcard-sets/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'invalid id' });
+        }
+        const col = db.collection('flashcardSets');
+        const set = await col.findOne({ _id: new ObjectId(id) });
+        if (!set) return res.status(404).json({ error: 'Set not found' });
+        res.json({ title: set.title, description: set.description, cards: set.cards });
+    } catch (e) {
+        res.status(500).json({ error: 'failed to fetch set' });
     }
 });
 
