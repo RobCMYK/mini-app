@@ -137,3 +137,60 @@ process.on('SIGTERM', async () => { await client.close(); process.exit(0); });
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+// API to update an existing flashcard set
+app.patch('/api/flashcard-sets/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'invalid id' });
+        const { title, description, cards } = req.body || {};
+
+        if (!title || !Array.isArray(cards)) {
+            return res.status(400).json({ error: 'title and cards[] are required' });
+        }
+
+        const cleanedCards = cards
+            .map((c, i) => ({
+                term: String(c?.term || '').trim(),
+                definition: String(c?.definition || '').trim(),
+                order: i,
+            }))
+            .filter(c => c.term || c.definition);
+
+        if (cleanedCards.length === 0) {
+            return res.status(400).json({ error: 'cards must include at least one term/definition' });
+        }
+
+        const update = {
+            $set: {
+                title: String(title).trim(),
+                description: String(description || '').trim(),
+                cards: cleanedCards,
+                updatedAt: new Date(),
+            }
+        };
+
+        const col = db.collection('flashcardSets');
+        const result = await col.updateOne({ _id: new ObjectId(id) }, update);
+        if (result.matchedCount === 0) return res.status(404).json({ error: 'Set not found' });
+        res.json({ id });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'failed to update set' });
+    }
+});
+
+// API to delete a flashcard set
+app.delete('/api/flashcard-sets/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'invalid id' });
+        const col = db.collection('flashcardSets');
+        const result = await col.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 0) return res.status(404).json({ error: 'Set not found' });
+        res.status(204).send();
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'failed to delete set' });
+    }
+});
