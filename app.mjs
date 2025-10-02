@@ -67,8 +67,8 @@ app.post('/api/flashcard-sets', async (req, res) => {
             createdAt: new Date(),
         };
 
-    const result = await db.collection('flashcardSets').insertOne(doc);
-    res.status(201).json({ id: String(result.insertedId) });
+        const result = await db.collection('flashcardSets').insertOne(doc);
+        res.status(201).json({ id: String(result.insertedId) });
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'failed to save set' });
@@ -94,10 +94,10 @@ app.get('/api/flashcard-sets', async (req, res) => {
         const col = db.collection('flashcardSets');
         const [itemsRaw, total] = await Promise.all([
             col.find(filter, { projection: { cards: 0 } })
-               .sort({ createdAt: -1 })
-               .skip(Number(skip) || 0)
-               .limit(Math.min(Number(limit) || 20, 100))
-               .toArray(),
+                .sort({ createdAt: -1 })
+                .skip(Number(skip) || 0)
+                .limit(Math.min(Number(limit) || 20, 100))
+                .toArray(),
             col.countDocuments(filter),
         ]);
 
