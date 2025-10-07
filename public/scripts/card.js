@@ -175,20 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let nextId = 1;
 
-  function addCard() {
+  function addCard(ev) {
+    // Prevent form submission if button is inside a form
+    if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
+
+    const idNum = nextId++;
     const frag = template.content.cloneNode(true);
 
     // Set title
     const title = frag.querySelector('.card-title');
-    if (title) title.textContent = `Card ${nextId}`;
+    if (title) title.textContent = `Card ${idNum}`;
 
     // Wire up Term
     const termInput = frag.querySelector('.card-term');
     const termLabel = frag.querySelector('label[for="card-term-__ID__"]');
     if (termInput) {
-      const termId = `card-term-${nextId}`;
+      const termId = `card-term-${idNum}`;
       termInput.id = termId;
-      termInput.name = `cards[${nextId - 1}][term]`;
+      termInput.name = `cards[${idNum - 1}][term]`;
       if (termLabel) termLabel.setAttribute('for', termId);
     }
 
@@ -196,45 +200,62 @@ document.addEventListener('DOMContentLoaded', () => {
     const defInput = frag.querySelector('.card-definition');
     const defLabel = frag.querySelector('label[for="card-def-__ID__"]');
     if (defInput) {
-      const defId = `card-def-${nextId}`;
+      const defId = `card-def-${idNum}`;
       defInput.id = defId;
-      defInput.name = `cards[${nextId - 1}][definition]`;
+      defInput.name = `cards[${idNum - 1}][definition]`;
       if (defLabel) defLabel.setAttribute('for', defId);
     }
 
     container.appendChild(frag);
-    nextId += 1;
   }
 
-  addBtn.addEventListener('click', addCard);
+  // Bind once to avoid duplicate cards if script is loaded twice
+  if (!addBtn.dataset.bound) {
+    addBtn.addEventListener('click', addCard);
+    addBtn.dataset.bound = '1';
+  }
 
   // Gather inputs and POST to the API
-  document.getElementById('save-set')?.addEventListener('click', async (ev) => {
-    const title = document.getElementById('flashcard-title')?.value || '';
-    const description = document.getElementById('flashcard-description')?.value || '';
-    const cards = [...document.querySelectorAll('#cards-container section')].map(section => ({
-      term: section.querySelector('.card-term')?.value || '',
-      definition: section.querySelector('.card-definition')?.value || ''
-    }));
-    const saveBtn = ev.currentTarget;
-    const editingId = saveBtn?.dataset?.editingId;
-    try {
-      const url = editingId ? `/api/flashcard-sets/${editingId}` : '/api/flashcard-sets';
-      const method = editingId ? 'PATCH' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, cards })
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to save');
-      alert(editingId ? 'Updated!' : `Saved! id: ${data.id}`);
-      // Clear editing state and reload list
-      if (saveBtn) delete saveBtn.dataset.editingId;
-      await loadSets();
-    } catch (err) {
-      console.error(err);
-      alert('Error saving set');
-    }
-  });
+  const saveSetBtn = document.getElementById('save-set');
+  if (saveSetBtn && !saveSetBtn.dataset.bound) {
+    saveSetBtn.addEventListener('click', async (ev) => {
+      // Prevent native form submit and duplicate propagation
+      if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
+      ev.stopPropagation?.();
+
+      const title = document.getElementById('flashcard-title')?.value || '';
+      const description = document.getElementById('flashcard-description')?.value || '';
+      const cards = [...document.querySelectorAll('#cards-container section')].map(section => ({
+        term: section.querySelector('.card-term')?.value || '',
+        definition: section.querySelector('.card-definition')?.value || ''
+      }));
+      const saveBtn = ev.currentTarget;
+      const editingId = saveBtn?.dataset?.editingId;
+
+      // Disable to avoid double clicks
+      saveBtn.disabled = true;
+
+      try {
+        const url = editingId ? `/api/flashcard-sets/${editingId}` : '/api/flashcard-sets';
+        const method = editingId ? 'PATCH' : 'POST';
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, description, cards })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to save');
+        alert(editingId ? 'Updated!' : `Saved! id: ${data.id}`);
+        // Clear editing state and reload list
+        if (saveBtn) delete saveBtn.dataset.editingId;
+        await loadSets();
+      } catch (err) {
+        console.error(err);
+        alert('Error saving set');
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+    saveSetBtn.dataset.bound = '1';
+  }
 });
