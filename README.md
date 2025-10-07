@@ -1,4 +1,4 @@
-# MiniApp — Flashcard Sets
+# MiniApp — Flashcard Sets — Robert Martin
 
 A small web app (inspired by Quizlet) that lets users create flashcard sets by specifying a title, optional description, and multiple cards with a term and definition. Users can view previous sets, edit them inline, or delete them.
 
