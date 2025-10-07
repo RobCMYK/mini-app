@@ -59,7 +59,7 @@ app.post('/api/flashcard-sets', async (req, res) => {
         if (cleanedCards.length === 0) {
             return res.status(400).json({ error: 'cards must include at least one term/definition' });
         }
-
+        // Prepare the document to insert into the database 
         const doc = {
             title: String(title).trim(),
             description: String(description || '').trim(),
@@ -79,7 +79,7 @@ app.post('/api/flashcard-sets', async (req, res) => {
 app.get('/api/flashcard-sets', async (req, res) => {
     try {
         const { q, limit = 20, skip = 0 } = req.query;
-
+        // Build the filter based on the search query
         const filter = {};
         if (q && String(q).trim()) {
             const term = String(q).trim();
@@ -148,7 +148,7 @@ app.patch('/api/flashcard-sets/:id', async (req, res) => {
         if (!title || !Array.isArray(cards)) {
             return res.status(400).json({ error: 'title and cards[] are required' });
         }
-
+        // Clean and validate cards
         const cleanedCards = cards
             .map((c, i) => ({
                 term: String(c?.term || '').trim(),
@@ -160,7 +160,7 @@ app.patch('/api/flashcard-sets/:id', async (req, res) => {
         if (cleanedCards.length === 0) {
             return res.status(400).json({ error: 'cards must include at least one term/definition' });
         }
-
+        // Prepare the update document
         const update = {
             $set: {
                 title: String(title).trim(),
